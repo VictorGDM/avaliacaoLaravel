@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserContoller;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -33,15 +34,8 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('/roles', RoleController::class)->middleware(['auth', 'admin']);
 
-Route::get('/users/{id}/edit', function($id)  {
-    $user = User::find($id);
-    return view('users.edit');
-})->name('users.edit');
-
-Route::delete('/users/{id}', function($id)  {
-    $user = User::find($id);
-    $user->delete();
-    return redirect()->route('dashboard');
-})->name('users.destroy');
+Route::get('/users/{id}/edit', [UserContoller::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserContoller::class, 'update'])->name('users.update');
+Route::delete('/users/{id}', [UserContoller::class, 'destroy'])->name('users.destroy');
 
 require __DIR__.'/auth.php';
